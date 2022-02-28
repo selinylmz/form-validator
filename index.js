@@ -12,34 +12,30 @@ function error(input, message) {
 function success(input) {
   input.className = "form-control is-valid";
 }
-const validateEmail = (email) => {
-
-  return String(email)
-    .toLowerCase()
-    .match(
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-    );
+function checkEmail (input){
+  const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  if (re.test(input.value)){
+    success(input)
+  }else{
+    error(input,'Emaili hatali formatta girdiniz!')
+  }
+ 
 };
-
+function checkRequired(inputs){
+  inputs.forEach(function(input){
+    if(input.value===''){
+      error(input,`${input.id} is required`);
+    }
+    else{
+      success(input);
+    }
+  })
+    
+}
 form.addEventListener("submit", function (e) {
   e.preventDefault();
 
-
-  username.value === ""
-    ? error(username, "Username gerekli!")
-    : success(username);
-  if (email.value === "") {
-    error(email, "Email giriniz!");
-  } else if (!validateEmail(email.value)) {
-    error(email, "Emaili formata uygun girin!");
-  } else {
-    success(email);
-  }
-
-  password.value === ""
-    ? error(password, "Parola girmediniz!")
-    : success(password);
-  repassword.value === ""
-    ? error(repassword, "Parolalar eslesmedi!")
-    : submit(repassword);
+  checkRequired([username,email,password,repassword]);
+  checkEmail(email)
+ 
 });
